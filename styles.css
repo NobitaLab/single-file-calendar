@@ -1,0 +1,855 @@
+#calendar {
+    --color-background-heading: transparent;
+    --color-background-day: transparent;
+    --color-background-today: transparent;
+    --color-background-weekend: color-mix(
+        in srgb,
+        var(--text-normal) 10%,
+        transparent
+    );
+
+    --color-button: var(--text-muted);
+
+    --color-text-title: var(--text-normal);
+    --color-text-heading: var(--text-muted);
+    --color-text-day: var(--text-normal);
+    --color-text-today: var(--interactive-accent);
+}
+
+.month-and-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.month-and-nav h3 {
+    margin: 0;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-button {
+    border: none;
+    padding: 0;
+    border-radius: 4px;
+    color: var(--color-button);
+    cursor: pointer;
+    transition:
+        background-color 0.1s ease-in,
+        color 0.1s ease-in;
+}
+
+.nav-button:hover {
+    background-color: color-mix(in srgb, var(--text-normal) 10%, transparent);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: var(--color-background-heading);
+    color: var(--color-text-heading);
+    font-size: 0.6em;
+    letter-spacing: 1px;
+    padding: 4px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.weekend {
+    background-color: var(--color-background-weekend);
+}
+
+.day {
+    background-color: var(--color-background-day);
+    color: var(--color-text-day);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    height: 100%;
+    padding: 6px;
+    margin: 2px;
+    position: relative;
+    text-align: center;
+    transition:
+        background-color 0.1s ease-in,
+        color 0.1s ease-in;
+    vertical-align: baseline;
+}
+
+.day:hover {
+    background-color: color-mix(in srgb, var(--text-normal) 10%, transparent);
+}
+
+.today {
+    color: var(--color-text-today);
+    background-color: var(--color-background-today);
+    font-weight: bold;
+}
+
+.day:active {
+    color: var(--text-on-accent);
+    background-color: var(--interactive-accent);
+}
+
+.adjacent-month {
+    color: color-mix(in srgb, var(--color-text-day) 35%, transparent);
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* =====================================================
+   FullCalendar Styles
+   ===================================================== */
+
+.full-calendar-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.full-calendar-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: var(--text-muted);
+}
+
+.full-calendar-container {
+    height: 100%;
+    min-height: 400px;
+}
+
+/* FullCalendar theme overrides for Obsidian - 飞书风格 */
+.fc {
+    --fc-border-color: var(--background-modifier-border);
+    --fc-button-bg-color: var(--interactive-normal);
+    --fc-button-border-color: var(--interactive-normal);
+    --fc-button-text-color: var(--text-normal);
+    --fc-button-hover-bg-color: var(--interactive-hover);
+    --fc-button-hover-border-color: var(--interactive-hover);
+    --fc-button-active-bg-color: var(--interactive-accent);
+    --fc-button-active-border-color: var(--interactive-accent);
+    --fc-today-bg-color: var(--background-primary-alt);
+    --fc-neutral-bg-color: var(--background-secondary);
+    --fc-page-bg-color: var(--background-primary);
+    --fc-highlight-color: var(--text-selection);
+    --fc-event-bg-color: var(--interactive-accent);
+    --fc-event-border-color: var(--interactive-accent);
+    --fc-event-text-color: var(--text-on-accent);
+    --fc-now-indicator-color: #e74c3c;
+    --fc-list-event-hover-bg-color: var(--background-secondary);
+}
+
+/* 飞书风格：更简洁的星期标题 */
+.fc .fc-col-header-cell {
+    padding: 12px 4px;
+    background-color: var(--background-primary);
+}
+
+.fc .fc-col-header-cell-cushion {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-normal);
+    text-decoration: none;
+    padding: 8px 0;
+}
+
+.fc-custom-day-header {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* 飞书风格：工具栏 */
+.fc .fc-toolbar-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-normal);
+}
+
+.fc .fc-toolbar {
+    gap: 12px;
+}
+
+.fc .fc-button {
+    border-radius: 6px;
+    font-size: 13px;
+    padding: 6px 12px;
+    margin: 0 2px;
+    font-weight: 500;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.fc .fc-button:hover {
+    background-color: var(--interactive-hover);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background-color: var(--interactive-accent);
+    border-color: var(--interactive-accent);
+}
+
+/* 飞书风格：日期数字 */
+.fc .fc-daygrid-day-number {
+    color: var(--text-normal);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 8px;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+    font-weight: 600;
+    color: var(--text-accent);
+    background-color: transparent;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: transparent;
+}
+
+.fc .fc-daygrid-day:hover {
+    background-color: var(--background-primary-alt);
+}
+
+/* 飞书风格：时间网格 */
+.fc .fc-timegrid-slot {
+    height: 2em;
+}
+
+.fc .fc-timegrid-slot-label {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.fc .fc-timegrid-slot:nth-child(odd) {
+    background-color: transparent;
+}
+
+/* 飞书风格：更淡的网格线 */
+.fc-theme-standard .fc-scrollgrid {
+    border: none;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border-color: var(--background-modifier-border);
+}
+
+.fc .fc-timegrid-col.fc-day-today {
+    background-color: var(--background-primary-alt);
+}
+
+.fc .fc-timegrid-now-indicator-line {
+    border-color: #e74c3c;
+    border-width: 1px;
+    height: 0;
+}
+
+.fc .fc-timegrid-now-indicator-arrow {
+    display: none !important;
+}
+
+/* 飞书风格：简洁红色细线 */
+.fc-timegrid-now-indicator-line {
+    border-color: #e74c3c !important;
+    border-width: 2px 0 0 0 !important;
+    background-color: transparent !important;
+    height: 0 !important;
+    box-shadow: none !important;
+}
+
+.fc-timegrid-now-indicator-arrow {
+    display: none !important;
+}
+
+/* 覆盖 FullCalendar 默认样式 */
+.fc .fc-timegrid-now-indicator-line::before {
+    display: none !important;
+}
+
+/* Event styling */
+.fc-event {
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.85em;
+    padding: 2px 4px;
+    border: none !important;
+}
+
+.fc-event:hover {
+    filter: brightness(1.1);
+}
+
+.fc-event .fc-event-title {
+    font-weight: 500;
+}
+
+.fc-event .fc-event-time {
+    font-size: 0.75em;
+    opacity: 0.8;
+}
+
+/* Event colors by tag */
+.fc-event-tag-work {
+    background-color: #4a90d9 !important;
+    border-color: #4a90d9 !important;
+}
+
+.fc-event-tag-personal {
+    background-color: #7b68ee !important;
+    border-color: #7b68ee !important;
+}
+
+.fc-event-tag-health {
+    background-color: #50c878 !important;
+    border-color: #50c878 !important;
+}
+
+.fc-event-tag-family {
+    background-color: #ff6b6b !important;
+    border-color: #ff6b6b !important;
+}
+
+.fc-event-tag-social {
+    background-color: #ffd93d !important;
+    border-color: #ffd93d !important;
+    color: #333 !important;
+}
+
+.fc-event-tag-important {
+    background-color: #e74c3c !important;
+    border-color: #e74c3c !important;
+}
+
+.fc-event-tag-meeting {
+    background-color: #3498db !important;
+    border-color: #3498db !important;
+}
+
+.fc-event-tag-reminder {
+    background-color: #f39c12 !important;
+    border-color: #f39c12 !important;
+}
+
+/* Chinese tag colors */
+.fc-event-tag-工作 {
+    background-color: #4a90d9 !important;
+    border-color: #4a90d9 !important;
+}
+
+.fc-event-tag-个人 {
+    background-color: #7b68ee !important;
+    border-color: #7b68ee !important;
+}
+
+.fc-event-tag-健康 {
+    background-color: #50c878 !important;
+    border-color: #50c878 !important;
+}
+
+.fc-event-tag-家庭 {
+    background-color: #ff6b6b !important;
+    border-color: #ff6b6b !important;
+}
+
+.fc-event-tag-社交 {
+    background-color: #ffd93d !important;
+    border-color: #ffd93d !important;
+    color: #333 !important;
+}
+
+.fc-event-tag-重要 {
+    background-color: #e74c3c !important;
+    border-color: #e74c3c !important;
+}
+
+.fc-event-tag-会议 {
+    background-color: #3498db !important;
+    border-color: #3498db !important;
+}
+
+.fc-event-tag-提醒 {
+    background-color: #f39c12 !important;
+    border-color: #f39c12 !important;
+}
+
+.fc-event-tag-学习 {
+    background-color: #9b59b6 !important;
+    border-color: #9b59b6 !important;
+}
+
+.fc-event-tag-旅行 {
+    background-color: #1abc9c !important;
+    border-color: #1abc9c !important;
+}
+
+.fc-event-tag-娱乐 {
+    background-color: #e91e63 !important;
+    border-color: #e91e63 !important;
+}
+
+.fc-event-tag-其他 {
+    background-color: #95a5a6 !important;
+    border-color: #95a5a6 !important;
+}
+
+/* List view */
+.fc .fc-list-event:hover td {
+    background-color: var(--background-secondary-alt);
+}
+
+.fc .fc-list-table {
+    border: none;
+}
+
+.fc .fc-list-day-cushion {
+    background-color: var(--background-secondary);
+    font-weight: 600;
+}
+
+/* Modal styling for event editor */
+.event-editor-modal {
+    padding: 20px;
+}
+
+.event-editor-modal .setting-item {
+    margin-bottom: 12px;
+}
+
+.event-editor-modal .setting-item-control {
+    flex: 1;
+}
+
+.event-editor-modal .setting-item-control input[type="text"],
+.event-editor-modal .setting-item-control input[type="date"],
+.event-editor-modal .setting-item-control input[type="time"] {
+    width: 100%;
+}
+
+.event-editor-modal .setting-item-control textarea {
+    width: 100%;
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Selected tags container */
+.selected-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    margin-bottom: 12px;
+    background-color: var(--background-secondary);
+    border-radius: 4px;
+}
+
+.selected-tags-container span:first-child {
+    color: var(--text-muted);
+    font-size: 0.9em;
+}
+
+.selected-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+    border-radius: 4px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+.selected-tag:hover {
+    background-color: var(--interactive-accent-hover);
+}
+
+.selected-tag::after {
+    content: " ✕";
+    margin-left: 4px;
+    font-size: 0.8em;
+}
+
+.modal-button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-button-container .mod-danger {
+    background-color: var(--text-error);
+    color: white;
+}
+
+/* Week number display */
+.fc .fc-week-number {
+    font-size: 0.7em;
+    color: var(--text-muted);
+}
+
+/* More link - 飞书风格 */
+.fc .fc-more-link {
+    font-size: 12px;
+    color: var(--text-accent);
+    font-weight: 500;
+    padding: 2px 6px;
+}
+
+.fc .fc-more-link:hover {
+    background-color: var(--background-primary-alt);
+    border-radius: 4px;
+}
+
+/* Popover for events - 飞书风格 */
+.fc-popover {
+    background-color: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.fc-popover-header {
+    background-color: var(--background-secondary);
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    .fc .fc-toolbar {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1em;
+    }
+
+    .fc .fc-button {
+        font-size: 0.8em;
+        padding: 3px 6px;
+    }
+}
+
+/* =====================================================
+   Daily Note Event Styles - 飞书风格
+   ===================================================== */
+
+.fc-event-daily-note {
+    background-color: var(--interactive-accent) !important;
+    border: none !important;
+    color: var(--text-on-accent) !important;
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 4px 8px;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.15s ease;
+}
+
+.fc-event-daily-note:hover {
+    filter: brightness(1.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.fc-event-daily-note .fc-event-title {
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fc-event-daily-note .fc-event-time {
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+/* Month view event styling - 飞书风格 */
+.fc-daygrid-event {
+    margin: 2px 4px;
+    white-space: nowrap;
+    border-radius: 3px;
+}
+
+.fc-daygrid-day-frame {
+    position: relative;
+    height: 100%;
+}
+
+/* Week/Day view event styling - 飞书风格 */
+.fc-timegrid-event {
+    border-radius: 4px;
+    border: none !important;
+    min-height: 30px !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: flex-start;
+    padding: 2px 4px;
+}
+
+/* 隐藏内容为空的无效事件 */
+.fc-timegrid-event:empty,
+.fc-timegrid-event:has(.fc-event-title:empty):not(.fc-event-daily-note) {
+    display: none !important;
+}
+
+/* 隐藏没有标题的事件 */
+.fc-timegrid-event:not(.fc-event-daily-note) .fc-event-title:empty ~ .fc-event-time,
+.fc-timegrid-event:not(.fc-event-daily-note):not(:has(.fc-event-title)) {
+    display: none !important;
+}
+
+/* 隐藏 timegrid 中可能的无内容事件 */
+.fc-timegrid-event-harness:not(:has(.fc-event-daily-note)):not(:has(.fc-timegrid-event:not(:empty))) {
+    display: none !important;
+}
+
+/* 隐藏周视图时间列的空事件点 */
+.fc-timegrid-col-events .fc-timegrid-event:empty {
+    display: none !important;
+}
+
+.fc-timegrid-event-harness {
+    z-index: 1;
+    min-height: 30px;
+}
+
+.fc-timegrid-event-harness > .fc-timegrid-event {
+    margin-top: 1px;
+}
+
+/* Ensure events have proper background */
+.fc-timegrid-event .fc-event-main {
+    padding: 2px 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Make sure event content is visible */
+.fc-timegrid-event .fc-event-main-frame {
+    height: auto !important;
+    min-height: 20px;
+}
+
+.fc-timegrid-event .fc-event-title-container,
+.fc-timegrid-event .fc-event-time-container {
+    display: block !important;
+}
+
+.fc-timegrid-event .fc-event-title {
+    font-weight: 500;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Day view event styling */
+.fc-timegrid-day-frame {
+    overflow: hidden;
+}
+
+/* =====================================================
+   Modal Enhancements
+   ===================================================== */
+
+.create-note-modal,
+.edit-note-modal {
+    padding: 20px;
+}
+
+.create-note-modal .note-date,
+.edit-note-modal .note-date {
+    color: var(--text-muted);
+    font-size: 0.9em;
+    margin-bottom: 12px;
+}
+
+.create-note-modal label,
+.edit-note-modal label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.create-note-modal textarea,
+.edit-note-modal textarea {
+    background-color: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    color: var(--text-normal);
+    font-family: var(--font-text);
+    padding: 10px;
+}
+
+.create-note-modal textarea:focus,
+.edit-note-modal textarea:focus {
+    border-color: var(--interactive-accent);
+    outline: none;
+}
+
+/* =====================================================
+   View Switching Improvements
+   ===================================================== */
+
+.fc-button-active {
+    background-color: var(--interactive-accent) !important;
+    border-color: var(--interactive-accent) !important;
+    color: var(--text-on-accent) !important;
+}
+
+.fc-button:not(.fc-button-active):hover {
+    background-color: var(--interactive-hover) !important;
+    border-color: var(--interactive-hover) !important;
+}
+
+/* List view styling */
+.fc-list-table {
+    border: none;
+    font-size: 0.9em;
+}
+
+.fc-list-day-cushion {
+    background-color: var(--background-secondary);
+    font-weight: 600;
+    padding: 8px 12px;
+}
+
+.fc-list-event {
+    cursor: pointer;
+}
+
+.fc-list-event:hover td {
+    background-color: var(--background-secondary-alt);
+}
+
+.fc-list-event-title {
+    color: var(--text-normal);
+}
+
+/* =====================================================
+   Empty State & Loading
+   ===================================================== */
+
+.full-calendar-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.full-calendar-container {
+    flex: 1;
+    min-height: 300px;
+}
+
+.full-calendar-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(var(--background-primary), 0.8);
+    color: var(--text-muted);
+    font-size: 1em;
+    z-index: 10;
+}
+
+/* =====================================================
+   Right-click Menu Context
+   ===================================================== */
+
+.fc-event-daily-note {
+    user-select: none;
+}
+
+/* =====================================================
+   Today Highlight
+   ===================================================== */
+
+.fc-day-today {
+    background-color: var(--background-primary-alt) !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+    color: var(--text-accent);
+    font-weight: bold;
+}
+
+/* Time indicator line - 飞书风格红色细线 */
+.fc-timegrid-now-indicator-line,
+.fc .fc-timegrid-now-indicator-line,
+div.fc-timegrid-now-indicator-line {
+    border-color: #e74c3c !important;
+    border-width: 1px 0 0 0 !important;
+    background-color: transparent !important;
+    height: 0 !important;
+    box-shadow: none !important;
+}
+
+.fc-timegrid-now-indicator-arrow,
+.fc .fc-timegrid-now-indicator-arrow,
+div.fc-timegrid-now-indicator-arrow {
+    display: none !important;
+}
+
+/* =====================================================
+   Event Tooltip Styles
+   ===================================================== */
+
+.fc-event-tooltip {
+    position: fixed;
+    z-index: 10000;
+    max-width: 400px;
+    min-width: 200px;
+    padding: 16px 20px;
+    background-color: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 15px;
+    line-height: 1.6;
+    display: none;
+    pointer-events: none;
+}
+
+.fc-tooltip-title {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--text-normal);
+    margin-bottom: 6px;
+}
+
+.fc-tooltip-time {
+    color: var(--text-accent);
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.fc-tooltip-content {
+    color: var(--text-muted);
+    font-size: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--background-modifier-border);
+    white-space: pre-wrap;
+}
