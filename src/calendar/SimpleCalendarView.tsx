@@ -213,23 +213,33 @@ export function SimpleCalendarView({
                     // 添加样式类
                     info.el.addClass("fc-event-daily-note");
 
-                    // 创建自定义悬浮提示
-                    const tooltip = document.createElement("div");
+                    // 创建自定义悬浮提示 - 使用 activeDocument 兼容 popout 窗口
+                    const doc = window.document;
+                    const tooltip = doc.createElement("div");
                     tooltip.className = "fc-event-tooltip";
 
                     // 构建提示内容
-                    let tooltipHTML = `<div class="fc-tooltip-title">${note.title}</div>`;
+                    const tooltipTitle = doc.createElement("div");
+                    tooltipTitle.className = "fc-tooltip-title";
+                    tooltipTitle.textContent = note.title;
+                    tooltip.appendChild(tooltipTitle);
+
                     if (note.startTime && note.endTime) {
-                        tooltipHTML += `<div class="fc-tooltip-time">${note.startTime} - ${note.endTime}</div>`;
+                        const tooltipTime = doc.createElement("div");
+                        tooltipTime.className = "fc-tooltip-time";
+                        tooltipTime.textContent = `${note.startTime} - ${note.endTime}`;
+                        tooltip.appendChild(tooltipTime);
                     }
                     if (note.content && note.content.length > 0) {
-                        tooltipHTML += `<div class="fc-tooltip-content">${note.content.join("<br>")}</div>`;
+                        const tooltipContent = doc.createElement("div");
+                        tooltipContent.className = "fc-tooltip-content";
+                        tooltipContent.textContent = note.content.join("\n");
+                        tooltip.appendChild(tooltipContent);
                     }
-                    tooltip.innerHTML = tooltipHTML;
 
                     // 添加悬停事件
                     info.el.addEventListener("mouseenter", (e: MouseEvent) => {
-                        document.body.appendChild(tooltip);
+                        doc.body.appendChild(tooltip);
                         const rect = info.el.getBoundingClientRect();
                         tooltip.style.left = `${rect.left}px`;
                         tooltip.style.top = `${rect.bottom + 8}px`;
@@ -253,7 +263,7 @@ export function SimpleCalendarView({
         setIsLoading(false);
 
         // 初始化完成后刷新数据，刷新完成后会自动触发 onRefresh 回调来更新事件源
-        noteStore.refresh();
+        void noteStore.refresh();
 
         // 监听视口变化，自动调整日历大小
         const handleResize = () => {

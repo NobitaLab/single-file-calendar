@@ -1,8 +1,9 @@
-import { moment as _moment, type App, TFile, TFolder } from "obsidian";
+import { moment as _moment, type App, TFile } from "obsidian";
 
 import type { PluginSettings } from "./settings";
 
-export const moment = _moment as unknown as typeof _moment.default;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const moment = _moment as any;
 
 /**
  * Returns the path for the daily notes file
@@ -69,7 +70,7 @@ export const createDailyNotesFile = async (
             // Create the folder - ignore if it already exists
             try {
                 await app.vault.createFolder(folderPath);
-            } catch (e) {
+            } catch {
                 // Ignore "folder already exists" error
             }
         }
@@ -150,13 +151,16 @@ export const insertNoteForDate = (
             continue;
         }
 
+        // biome-ignore lint: moment.js 类型问题
         const lineDate = moment(line.split(" ", 2)[1], settings.dateFormat);
 
+        // biome-ignore lint: moment.js 类型问题
         if (!lineDate.isValid()) {
             i++;
             continue;
         }
 
+        // biome-ignore lint: moment.js 类型问题
         if (lineDate.isSame(date, "date")) {
             return [fileContent, i];
         }

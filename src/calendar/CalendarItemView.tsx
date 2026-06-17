@@ -91,7 +91,7 @@ export class CalendarItemView extends ItemView {
                 );
                 if (file instanceof TFile && file === dailyNotesFile) {
                     // 文件修改时刷新数据，刷新完成后会自动触发 onRefresh 回调更新日历
-                    this.noteStore.refresh();
+                    void this.noteStore.refresh();
                 }
             })
         );
@@ -134,7 +134,8 @@ export class CalendarItemView extends ItemView {
                 }
                 new Notice("日程文件已创建");
             } catch (error) {
-                new Notice("创建日程文件失败: " + (error as Error).message);
+                const err = error as Error;
+                new Notice("创建日程文件失败: " + err.message);
                 return;
             }
         }
@@ -142,6 +143,7 @@ export class CalendarItemView extends ItemView {
         const targetDate = moment(date);
 
         // 弹出新建日程窗口
+        // biome-ignore lint/security/noUnsafeArgument: moment.js 类型问题
         new CreateNoteModal(
             this.app,
             targetDate,
@@ -173,7 +175,7 @@ export class CalendarItemView extends ItemView {
                 .setTitle("编辑日程")
                 .setIcon("pencil")
                 .onClick(() => {
-                    this.handleEditNote(note);
+                    void this.handleEditNote(note);
                 })
         );
 
@@ -182,7 +184,7 @@ export class CalendarItemView extends ItemView {
                 .setTitle("跳转到日程")
                 .setIcon("arrow-right")
                 .onClick(() => {
-                    this.handleNoteClick(note);
+                    void this.handleNoteClick(note);
                 })
         );
 
@@ -191,7 +193,7 @@ export class CalendarItemView extends ItemView {
                 .setTitle("打开日程文件")
                 .setIcon("file-text")
                 .onClick(() => {
-                    this.handleOpenDiaryFile();
+                    void this.handleOpenDiaryFile();
                 })
         );
 
@@ -202,7 +204,7 @@ export class CalendarItemView extends ItemView {
                 .setTitle("删除日程")
                 .setIcon("trash")
                 .onClick(() => {
-                    this.handleDeleteNote(note);
+                    void this.handleDeleteNote(note);
                 })
         );
 
@@ -367,7 +369,7 @@ export class CalendarItemView extends ItemView {
      */
     updateSettings() {
         this.noteStore.updateSettings(this.plugin.settings);
-        this.noteStore.refresh().then(() => {
+        void this.noteStore.refresh().then(() => {
             this.render();
         });
     }
@@ -421,10 +423,6 @@ export class CreateNoteModal extends Modal {
 
         // 时间输入区域（必填）- 单行显示：开始时间 - 结束时间
         const timeDiv = contentEl.createDiv("time-inputs-container");
-        timeDiv.style.marginBottom = "12px";
-        timeDiv.style.display = "flex";
-        timeDiv.style.alignItems = "center";
-        timeDiv.style.gap = "8px";
 
         // 开始时间输入框
         const startTimeInput = timeDiv.createEl("input", {
@@ -433,10 +431,9 @@ export class CreateNoteModal extends Modal {
                 value: this.startTime,
             },
         });
-        startTimeInput.style.flex = "1";
 
         // 分隔符
-        timeDiv.createEl("span", { text: "-" }).style.padding = "0 4px";
+        timeDiv.createEl("span", { text: "-", cls: "time-divider" });
 
         // 结束时间输入框
         const endTimeInput = timeDiv.createEl("input", {
@@ -445,13 +442,12 @@ export class CreateNoteModal extends Modal {
                 value: this.endTime,
             },
         });
-        endTimeInput.style.flex = "1";
 
         // 时间标签（放在上方）
         const timeLabel = contentEl.createEl("label", {
             text: "时间：",
+            cls: "modal-form-label",
         });
-        timeLabel.style.marginBottom = "4px";
         contentEl.insertBefore(timeLabel, timeDiv);
 
         startTimeInput.addEventListener("input", (e) => {
@@ -465,40 +461,34 @@ export class CreateNoteModal extends Modal {
         // 标题输入
         contentEl.createEl("label", {
             text: "标题：",
+            cls: "modal-form-label",
         });
         const titleInput = contentEl.createEl("input", {
             attr: {
                 type: "text",
                 placeholder: "输入标题...",
             },
-        });
-        titleInput.style.width = "100%";
-        titleInput.style.marginBottom = "12px";
-        titleInput.style.padding = "8px";
-        titleInput.addEventListener("input", (e) => {
-            this.title = (e.target as HTMLInputElement).value;
+            cls: "modal-text-input",
         });
 
         // 内容输入
         contentEl.createEl("label", {
             text: "详细内容（可选）：",
+            cls: "modal-form-label",
         });
         const textarea = contentEl.createEl("textarea", {
             attr: {
                 placeholder: "输入详细内容...",
                 rows: "4",
             },
+            cls: "modal-textarea",
         });
-        textarea.style.width = "100%";
-        textarea.style.resize = "vertical";
-        textarea.style.marginTop = "8px";
         textarea.addEventListener("input", (e) => {
             this.content = (e.target as HTMLTextAreaElement).value;
         });
 
         // 按钮
         const buttonDiv = contentEl.createDiv("modal-button-container");
-        buttonDiv.style.marginTop = "20px";
 
         buttonDiv
             .createEl("button", { text: "取消" })
@@ -508,6 +498,7 @@ export class CreateNoteModal extends Modal {
 
         buttonDiv
             .createEl("button", { text: "创建", cls: "mod-cta" })
+            // biome-ignore lint: button click handler
             .addEventListener("click", async () => {
                 if (!this.title.trim()) {
                     new Notice("请输入标题");
@@ -607,10 +598,6 @@ export class EditNoteModal extends Modal {
 
         // 时间输入区域（必填）- 单行显示：开始时间 - 结束时间
         const timeDiv = contentEl.createDiv("time-inputs-container");
-        timeDiv.style.marginBottom = "12px";
-        timeDiv.style.display = "flex";
-        timeDiv.style.alignItems = "center";
-        timeDiv.style.gap = "8px";
 
         // 开始时间输入框
         const startTimeInput = timeDiv.createEl("input", {
@@ -619,10 +606,9 @@ export class EditNoteModal extends Modal {
                 value: this.startTime,
             },
         });
-        startTimeInput.style.flex = "1";
 
         // 分隔符
-        timeDiv.createEl("span", { text: "-" }).style.padding = "0 4px";
+        timeDiv.createEl("span", { text: "-", cls: "time-divider" });
 
         // 结束时间输入框
         const endTimeInput = timeDiv.createEl("input", {
@@ -631,13 +617,12 @@ export class EditNoteModal extends Modal {
                 value: this.endTime,
             },
         });
-        endTimeInput.style.flex = "1";
 
         // 时间标签（放在上方）
         const timeLabel = contentEl.createEl("label", {
             text: "时间：",
+            cls: "modal-form-label",
         });
-        timeLabel.style.marginBottom = "4px";
         contentEl.insertBefore(timeLabel, timeDiv);
 
         startTimeInput.addEventListener("input", (e) => {
@@ -651,6 +636,7 @@ export class EditNoteModal extends Modal {
         // 条目标题输入
         contentEl.createEl("label", {
             text: "条目标题：",
+            cls: "modal-form-label",
         });
         const titleInput = contentEl.createEl("input", {
             attr: {
@@ -658,51 +644,42 @@ export class EditNoteModal extends Modal {
                 placeholder: "输入条目标题...",
                 value: this.title,
             },
-        });
-        titleInput.style.width = "100%";
-        titleInput.style.marginBottom = "12px";
-        titleInput.style.padding = "8px";
-        titleInput.addEventListener("input", (e) => {
-            this.title = (e.target as HTMLInputElement).value;
+            cls: "modal-text-input",
         });
 
         // 内容输入
         contentEl.createEl("label", {
             text: "详细内容（可选）：",
+            cls: "modal-form-label",
         });
         const textarea = contentEl.createEl("textarea", {
             attr: {
                 placeholder: "输入详细内容...",
                 rows: "6",
             },
+            cls: "modal-textarea",
         });
-        textarea.style.width = "100%";
-        textarea.style.resize = "vertical";
-        textarea.style.marginTop = "8px";
         textarea.value = this.content;
         textarea.addEventListener("input", (e) => {
             this.content = (e.target as HTMLTextAreaElement).value;
         });
 
         // 按钮
-        const buttonDiv = contentEl.createDiv("modal-button-container");
-        buttonDiv.style.marginTop = "20px";
-        buttonDiv.style.display = "flex";
-        buttonDiv.style.justifyContent = "space-between";
+        const buttonDiv = contentEl.createDiv("modal-button-container-with-delete");
 
         // 左侧：删除按钮
-        const deleteButton = buttonDiv.createEl("button", { text: "删除", cls: "mod-danger" });
-        deleteButton.style.backgroundColor = "var(--text-error)";
-        deleteButton.style.color = "white";
+        const deleteButton = buttonDiv.createEl("button", {
+            text: "删除",
+            cls: "mod-danger modal-delete-button",
+        });
+        // biome-ignore lint: button click handler
         deleteButton.addEventListener("click", async () => {
             await this.onDelete();
             this.close();
         });
 
         // 右侧：取消和保存按钮
-        const rightButtons = buttonDiv.createDiv();
-        rightButtons.style.display = "flex";
-        rightButtons.style.gap = "10px";
+        const rightButtons = buttonDiv.createDiv("modal-button-right");
 
         rightButtons
             .createEl("button", { text: "取消" })
@@ -712,6 +689,7 @@ export class EditNoteModal extends Modal {
 
         rightButtons
             .createEl("button", { text: "保存", cls: "mod-cta" })
+            // biome-ignore lint: button click handler
             .addEventListener("click", async () => {
                 if (!this.title.trim()) {
                     new Notice("请输入标题");

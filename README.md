@@ -1,132 +1,113 @@
+# Single File Calendar
+
+A lightweight calendar plugin for Obsidian that stores all calendar data in a single markdown file.
+
+## Features
+
+- **Month/Week/Day Views**: Switch between different calendar views
+- **Single File Storage**: All events stored in one markdown file
+- **Quick Event Creation**: Click dates to create events
+- **Event Management**: Edit and delete events via right-click menu
+- **Customizable**: Configure file name, location, date format, and heading level
+
+## Installation
+
+### From Obsidian Community Plugin Market
+1. Open Obsidian Settings → Community plugins
+2. Turn off Safe Mode
+3. Search "Single File Calendar"
+4. Click Install and Enable
+
+### Manual Install
+1. Download `main.js`, `manifest.json`, `styles.css` from GitHub Release
+2. Create folder `.obsidian/plugins/single-file-calendar`
+3. Put all three files into the folder
+4. Restart Obsidian and enable the plugin
+
+## Basic Usage
+
+1. Open calendar view from left sidebar icon
+2. Create your first calendar note (or the plugin will create one automatically)
+3. Click dates to add events
+4. Right-click events to edit or delete
+5. Customize week start, color theme in plugin settings
+
+## Settings
+
+- **Calendar File Name**: Name of the markdown file (default: "日程")
+- **Calendar File Location**: Folder path where the file is stored
+- **Heading Level**: Markdown heading level for date sections (h2-h6)
+- **Date Format**: Date display format using moment.js syntax
+- **Month Format**: Month display format
+
+## Data Format
+
+Events are stored in markdown format:
+```markdown
+### 2024-01-15, 星期一
+
+#### Meeting 14:00-15:00
+- Discussion notes
+```
+
+## License
+
+MIT
+
+---
+
 # Obsidian 单文件日历 (Single File Calendar)
 
 一个功能强大的 [Obsidian](https://obsidian.md) 插件，提供月视图、周视图和日视图，将所有日程记录在同一个 Markdown 文件中。
 
-## ✨ 主要特性
+## 主要特性
 
-### 📅 多视图支持
+- **多视图支持**：月视图、周视图、日视图
+- **单文件存储**：所有日程保存在一个 Markdown 文件中
+- **快速创建**：点击日期即可创建日程
+- **右键菜单**：支持编辑和删除日程
+- **高度可配置**：自定义文件名、路径、日期格式等
 
-**月视图**：概览整月日程，快速定位和创建日程。
+## 安装
 
-<img src='image/月视图.png' width='500'>
+### 从 Obsidian 社区插件市场
+1. 打开 Obsidian 设置 → 社区插件
+2. 关闭安全模式
+3. 搜索 "Single File Calendar"
+4. 点击安装并启用
 
-**周视图**：详细查看一周的日程安排。
+### 手动安装
+1. 从 GitHub Release 下载 `main.js`、`manifest.json`、`styles.css`
+2. 创建文件夹 `.obsidian/plugins/single-file-calendar`
+3. 将三个文件放入文件夹
+4. 重启 Obsidian 并启用插件
 
-<img src='image/周视图.png' width='500'>
+## 基本用法
 
-**编辑界面**：支持时间配置；日程支持右击删除修改。
+1. 从左侧边栏图标打开日历视图
+2. 创建第一个日程文件（或插件会自动创建）
+3. 点击日期添加日程
+4. 右键点击日程进行编辑或删除
+5. 在插件设置中自定义周开始日、主题颜色等
 
-<img src='image/编辑界面.png' width='500'>
+## 设置选项
 
-### 📝 单文件存储
+- **日程文件名**：Markdown 文件名（默认为"日程"）
+- **日程文件位置**：文件存放的文件夹路径
+- **日程区块标题级别**：日期区块使用的标题级别（h2-h6）
+- **日程区块日期格式**：使用 moment.js 格式的日期显示格式
+- **月份标题格式**：月份显示格式
 
-所有日程都记录在同一个 Markdown 文件中，使用标准 Markdown 格式：
+## 数据格式
 
-```md
+日程以 Markdown 格式存储：
+```markdown
+### 2024-01-15, 星期一
 
-### 2026-06-17, 星期三
-
-#### 日程1 20:18-21:18
-
-- 日程1内容1
-- 日程1内容2
-- 日程1内容3
-
-#### 日程2 20:20-21:20
-
-日程2内容
-
-### 2026-06-16, 星期二
-
-#### 日程A 20:20-21:20
-
-日程A内容
-
+#### 会议 14:00-15:00
+- 讨论纪要
 ```
 
-### 🎯 核心功能
+## 许可证
 
-1. **日历视图**
-   - 支持月/周/日三种视图模式
-   - 点击日期快速创建日程
-   - 点击日程条目跳转到对应内容
-   - 右键菜单支持日程编辑和删除
-
-2. **日程管理**
-   - 支持设置开始时间和结束时间
-   - 自动保存，无需手动操作
-   - 支持拖拽调整日程时间（即将推出）
-
-3. **高度可配置**
-   - 自定义日程文件名称
-   - 自定义日程文件存放路径
-   - 自定义日期格式
-   - 自定义月份标题格式
-   - 自定义日程区块标题级别
-
-## 📦 安装
-
-1. 下载最新版本的 `main.js`、`styles.css` 和 `manifest.json`
-2. 在你的 Obsidian 库中创建文件夹：`你的库/.obsidian/plugins/single-file-calendar/`
-3. 将下载的文件复制到该文件夹
-4. 重启 Obsidian
-5. 在设置 > 第三方插件中启用"Single File Calendar"
-
-## 🚀 使用方法
-
-### 基本操作
-
-1. **打开日历**
-   - 点击左侧功能区（Ribbon）的日历图标
-   - 使用命令面板（Ctrl/Cmd + P）搜索"显示日历"
-
-2. **创建日程**
-   - 在月视图中点击日期创建日程
-   - 在周/日视图中点击时间区域创建日程
-
-3. **编辑日程**
-   - 点击日程条目跳转到 Markdown 文本
-   - 右键点击日程可进行编辑或删除
-
-4. **切换视图**
-   - 使用日历顶部的按钮切换月/周/日视图
-
-### 设置选项
-
-在 Obsidian 设置 > 第三方插件 > Single File Calendar 中可以配置：
-
-- **日程文件名**：默认为"日程"
-- **日程文件位置**：留空则存储在库的根目录
-- **日程区块标题级别**：支持 h2 到 h6
-- **日程区块日期格式**：使用 moment.js 格式
-- **月份标题格式**：使用 moment.js 格式
-
-## 💡 设计理念
-
-原始的 Obsidian 日程系统为每一天创建一个单独的文件，这会导致大量的文件累积。虽然有很多插件可以管理这些文件，但它们并没有改变底层文件结构。
-
-本插件将所有日程集中在同一个 Markdown 文件中，具有以下优势：
-
-- 📁 **减少文件数量**：避免大量小文件累积
-- 🔍 **便于搜索**：在单个文件中快速定位日程
-- 🔄 **易于同步**：单个文件更容易在不同设备间同步
-- 📊 **更好的概览**：多视图支持提供更好的日程概览
-
-
-## 📋 系统要求
-
-- Obsidian 1.7.2 或更高版本
-- 支持桌面和移动端
-
-## 📜 许可证
-
-MIT License
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-## 📮 反馈
-
-如果你有任何问题或建议，请在 GitHub 上提交 Issue。
-
+MIT

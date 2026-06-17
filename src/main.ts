@@ -1,5 +1,4 @@
 import {
-    Notice,
     Plugin,
     type TAbstractFile,
     TFile,
@@ -11,7 +10,6 @@ import { DEFAULT_SETTINGS, type PluginSettings, SettingsTab } from "./settings";
 import { CalendarItemView } from "./calendar/CalendarItemView";
 import {
     getDailyNotesFilePath,
-    getHeadingMd,
 } from "./utils";
 
 export default class SingleFileDailyNotes extends Plugin {
@@ -129,11 +127,12 @@ export default class SingleFileDailyNotes extends Plugin {
     }
 
     async loadSettings() {
+        const loadedData = await this.loadData();
         this.settings = Object.assign(
             {},
             DEFAULT_SETTINGS,
-            await this.loadData(),
-        );
+            loadedData,
+        ) as typeof DEFAULT_SETTINGS;
     }
 
     async saveSettings() {

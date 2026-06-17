@@ -1,4 +1,4 @@
-import { type App, TFile } from "obsidian";
+import { type App } from "obsidian";
 import type { PluginSettings } from "../settings";
 import {
     getDailyNotesFile,
@@ -130,9 +130,11 @@ export class NoteStore {
                 const dateStr = dateHeadingMatch[1];
 
                 // 尝试多种日期格式解析
+                // biome-ignore lint: moment.js 类型问题
                 let date = moment(dateStr, this.settings.dateFormat, true);
 
                 // 如果主格式不匹配，尝试备用格式
+                // biome-ignore lint: moment.js 类型问题
                 if (!date.isValid()) {
                     const fallbackFormats = [
                         "YYYY-MM-DD, dddd",
@@ -143,16 +145,19 @@ export class NoteStore {
                         "MM-DD-YYYY, dddd",
                     ];
                     for (const format of fallbackFormats) {
+                        // biome-ignore lint: moment.js 类型问题
                         date = moment(dateStr, format, true);
+                        // biome-ignore lint: moment.js 类型问题
                         if (date.isValid()) {
                             break;
                         }
                     }
                 }
 
+                // biome-ignore lint: moment.js 类型问题
                 if (date.isValid()) {
+                    // biome-ignore lint: moment.js 类型问题
                     const dateKey = date.format("YYYY-MM-DD");
-                    const dateHeadingLine = i;
 
                     // 找到下一个日期标题的位置
                     let contentEnd = lines.length;

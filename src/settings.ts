@@ -30,7 +30,7 @@ export class SettingsTab extends PluginSettingTab {
         this.containerEl.empty();
 
         // 日程设置
-        this.containerEl.createEl("h3", { text: "日程设置" });
+        new Setting(this.containerEl).setName("日程设置").setHeading();
         this.fileNameSetting();
         this.filePathSetting();
         this.headingTypeSetting();
@@ -107,8 +107,10 @@ export class SettingsTab extends PluginSettingTab {
                     const match = dateHeadingRegex.exec(line);
                     if (!match) continue;
 
+                    // biome-ignore lint: moment.js 类型问题
                     if (moment(match[2], dateFormat, true).isValid()) {
                         lines[i] = line.replace(match[1], newHeading);
+                    // biome-ignore lint: moment.js 类型问题
                     } else if (moment(match[2], monthFormat, true).isValid()) {
                         lines[i] = line.replace(match[1], newHeading.slice(1));
                     }

@@ -604,19 +604,7 @@ th {
 }
 
 /* 隐藏内容为空的无效事件 */
-.fc-timegrid-event:empty,
-.fc-timegrid-event:has(.fc-event-title:empty):not(.fc-event-daily-note) {
-    display: none !important;
-}
-
-/* 隐藏没有标题的事件 */
-.fc-timegrid-event:not(.fc-event-daily-note) .fc-event-title:empty ~ .fc-event-time,
-.fc-timegrid-event:not(.fc-event-daily-note):not(:has(.fc-event-title)) {
-    display: none !important;
-}
-
-/* 隐藏 timegrid 中可能的无内容事件 */
-.fc-timegrid-event-harness:not(:has(.fc-event-daily-note)):not(:has(.fc-timegrid-event:not(:empty))) {
+.fc-timegrid-event:empty {
     display: none !important;
 }
 
@@ -703,6 +691,78 @@ th {
 .edit-note-modal textarea:focus {
     border-color: var(--interactive-accent);
     outline: none;
+}
+
+/* =====================================================
+   Modal Form Elements - 替代内联样式
+   ===================================================== */
+
+/* 时间输入容器 */
+.time-inputs-container {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.time-inputs-container input[type="time"] {
+    flex: 1;
+}
+
+.time-inputs-container .time-divider {
+    padding: 0 4px;
+}
+
+/* 表单标签 */
+.modal-form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+/* 文本输入框 */
+.modal-text-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+}
+
+/* 文本域 */
+.modal-textarea {
+    width: 100%;
+    resize: vertical;
+    margin-top: 8px;
+}
+
+/* 按钮容器 */
+.modal-button-container {
+    margin-top: 20px;
+}
+
+/* 编辑模态框按钮容器 - 带删除按钮 */
+.modal-button-container-with-delete {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 编辑模态框按钮容器 */
+.modal-button-container-with-delete {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 右侧按钮组 */
+.modal-button-right {
+    display: flex;
+    gap: 10px;
+}
+
+/* 删除按钮 */
+.modal-delete-button {
+    background-color: var(--text-error);
+    color: white;
 }
 
 /* =====================================================
