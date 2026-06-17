@@ -22,7 +22,27 @@
 
 所有日程都记录在同一个 Markdown 文件中，使用标准 Markdown 格式：
 
-![](https://github.com/NobitaLab/single-file-calendar/image/数据保存.png)
+```md
+
+### 2026-06-17, 星期三
+
+#### 日程1 20:18-21:18
+
+- 日程1内容1
+- 日程1内容2
+- 日程1内容3
+
+#### 日程2 20:20-21:20
+
+日程2内容
+
+### 2026-06-16, 星期二
+
+#### 日程A 20:20-21:20
+
+日程A内容
+
+```
 
 ### 🎯 核心功能
 
@@ -92,11 +112,6 @@
 - 🔄 **易于同步**：单个文件更容易在不同设备间同步
 - 📊 **更好的概览**：多视图支持提供更好的日程概览
 
-## 🛠️ 技术栈
-
-- [React](https://react.dev/) - UI 框架
-- [FullCalendar](https://fullcalendar.io/) - 日历组件
-- [Obsidian API](https://docs.obsidian.md/Reference/TypeScript+API) - Obsidian 插件 API
 
 ## 📋 系统要求
 
@@ -115,6 +130,3 @@ MIT License
 
 如果你有任何问题或建议，请在 GitHub 上提交 Issue。
 
----
-
-**注意**：如果你之前使用了 Obsidian 内置的日程插件，建议在使用本插件前禁用它，以避免混淆。

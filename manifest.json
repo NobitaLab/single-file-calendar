@@ -1,10 +1,10 @@
 {
     "id": "single-file-calendar",
     "name": "Single File Calendar",
-    "version": "1.4.2",
+    "version": "1.0.0",
     "minAppVersion": "1.7.2",
     "description": "Manage schedules with month/week/day calendar views in a single Markdown file.",
-    "author": "Pranav Mangal",
-    "authorUrl": "https://mang.al",
+    "author": "NobitaLab",
+    "authorUrl": "https://github.com/NobitaLab",
     "isDesktopOnly": false
 }
