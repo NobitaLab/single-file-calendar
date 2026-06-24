@@ -307,15 +307,16 @@ export class NoteStore {
             }
 
             // 检查该日期区块内是否还有其他日程
+            // 需要检查整个日期区块，不只是被删除日程之后的部分
             let hasOtherNotes = false;
-            for (let i = note.lineNumber + note.lineCount; i < lines.length; i++) {
+            for (let i = sectionStart; i < lines.length; i++) {
                 const line = lines[i];
                 // 如果遇到下一个日期标题，停止检查
-                if (line.startsWith(dateHeadingMd + " ")) {
+                if (line.startsWith(dateHeadingMd + " ") && i !== sectionStart) {
                     break;
                 }
-                // 检查是否有其他日程（4级标题）
-                if (line.startsWith("#### ")) {
+                // 检查是否有其他日程（4级标题），排除当前要删除的日程
+                if (line.startsWith("#### ") && i !== note.lineNumber) {
                     hasOtherNotes = true;
                     break;
                 }
